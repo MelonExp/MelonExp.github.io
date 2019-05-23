@@ -89,6 +89,7 @@
             pipedownimage.src = "images/pipedown.png";
             times = Math.ceil(Spacewidth / groundwidth) + 1;
             initPipe();
+            DrawBegin();
             canvas = document.getElementById("canvas");
             canvas.addEventListener("mousedown", mouseDown, false);
             window.addEventListener("keydown", keyDown, false);
@@ -356,10 +357,7 @@
             //游戏结束后判断是否点击了重新开始
             else if (gamestate == 2) {
                 //Flappy.fillRect(boardx+14,boardy+boardheight-40,75,40); 
-                //鼠标是否在重新开始按钮上
-                if (mx > boardx + 14 && mx < boardx + 89 && my > boardy + boardheight - 40 && my < boardy + boardheight) {
                     restart();
-                }
             }
         }
 
