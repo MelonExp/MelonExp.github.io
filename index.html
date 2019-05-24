@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>GuguGua's Flappy Pig </title>
+    <title>Flappy Bird --Chanllege Youself!</title>
     <style>
         canvas {
             display: block;
@@ -30,15 +30,15 @@
         var S_death;
         var S_score;
 
-        var birdwidth = 50;
-        var birdheight = 60;
-        var birdx = 192 - birdwidth;
-        var birdy = 224 - birdheight;
-        var birdvy = 0;        //鸟初始的y轴速度
-        var birdimage;
+        var Birdwidth = 50;
+        var Birdheight = 60;
+        var Birdx = 192 - Birdwidth;
+        var Birdy = 224 - Birdheight;
+        var Birdvy = 0;        //鸟初始的y轴速度
+        var Birdimage;
         var gravity = 0.8;		 //重力加速度
         var jumpvelocity = 8;	 //跳跃时获得的向上速度
-        var birdstate;
+        var Birdstate;
 
         var upbackground;
         var bottombackground;
@@ -71,11 +71,12 @@
         var Flappy;
         var i;
         var pipeheight = [];
-        var Pipes = [
-            [0, 0],
-            [0, 0],
-            [0, 0]];
-
+        var Pipes = [[0, 0], [0, 0], [0, 0]];
+        var Re_image;
+        var Rex = 150;
+        var Rey = 260;
+        var ReWidth = 200;
+        var ReHeight = 200;
         function init() {
             Flappy = document.getElementById('canvas').getContext('2d');
             S_fly = document.getElementById('S_fly');
@@ -85,24 +86,25 @@
             Startsound = document.getElementById('Startsound');
             Flappy.lineWidth = 2;
             Flappy.font = "bold 40px KaiTi";
-            Flappy.fillStyle = 'red';
+            Flappy.fillStyle = '#EC7063';
             bottombackground = new Image();
             bottombackground.src = "images/ground.png";
             bottomstate = 1;
-            birdimage = new Image();
-            birdimage.src = "images/pig3.png";
-            birdstate = 1;
+            Birdimage = new Image();
+            Birdimage.src = "images/pig3.png";
+            Birdstate = 1;
             Infoimage = new Image();
             Infoimage.src = "images/Info1.png";
             boardimage = new Image();
-            boardimage.src = "images/scoreboard.png";
+            boardimage.src = "images/score1.png";
+            Re_image = new Image();
+            Re_image.src = "images/restart.png";
             boardx = (backgroundwidth - boardwidth) / 2;
             pipeupimage = new Image();
             pipeupimage.src = "images/pipeup.png";
             pipedownimage = new Image();
             pipedownimage.src = "images/pipedown.png";
             Num = Math.ceil(Spacewidth / groundwidth) + 1;
-
             initPipe();
             DrawBegin();
             canvas = document.getElementById("canvas");
@@ -135,7 +137,7 @@
             }
             //游戏进行中
             if (gamestate == 1) {
-                birdvy = birdvy + gravity;
+                Birdvy = Birdvy + gravity;
                 DrawScene();
                 DrawBird();
                 DrawScore();
@@ -143,9 +145,9 @@
             }
             //游戏结束
             if (gamestate == 2) {
-                if (birdy + birdheight < backgroundheight)	//如果鸟没有落地
-                    birdvy = birdvy + gravity;
-                else birdvy = 0;
+                if (Birdy + Birdheight < backgroundheight)	//如果鸟没有落地
+                    Birdvy = Birdvy + gravity;
+                else Birdvy = 0;
                 DrawEnd();
                 DrawBird();
                 DrawFinalScore();
@@ -153,12 +155,12 @@
         }
 
         function DrawIns() {
-            Flappy.drawImage(Infoimage, birdx - 90, birdy + birdheight - 150, Infowidth, Infoheight + 100);
+            Flappy.drawImage(Infoimage, Birdx - 90, Birdy + Birdheight - 150, Infowidth, Infoheight + 100);
         }
         function DrawFinalScore() {
-            Flappy.drawImage(boardimage, boardx, boardy, boardwidth, boardheight);
-            Flappy.fillText(score, boardx + 140, boardheight / 2 + boardy - 8);
-            Flappy.fillText(highscore, boardx + 140, boardheight / 2 + boardy + 44);
+            Flappy.drawImage(boardimage, boardx - 50, boardy - 100, boardwidth + 100, boardheight + 50);
+            Flappy.fillText(score, boardx + 160, boardheight / 2 + boardy - 60);
+            Flappy.fillText(highscore, boardx + 160, boardheight / 2 + boardy + 30);
         }
         function DrawBegin() {
             Flappy.clearRect(Spacex, Spacey, Spacewidth, Spaceheight);
@@ -242,41 +244,41 @@
         }
 
         function DrawBird() {
-            birdy = birdy + birdvy;
+            Birdy = Birdy + Birdvy;
             if (gamestate == 0) {
-                Flappy.drawImage(birdimage, 0, 0, 40, 42, birdx, birdy, birdwidth, birdheight);
+                Flappy.drawImage(Birdimage, 0, 0, 40, 42, Birdx, Birdy, Birdwidth, Birdheight);
             }
             else if (gamestate == 1) {
                 Flappy.save();
-                if (birdvy <= 6) {
-                    Flappy.translate(birdx + birdwidth / 2, birdy + birdheight / 2);
+                if (Birdvy <= 6) {
+                    Flappy.translate(Birdx + Birdwidth / 2, Birdy + Birdheight / 2);
                     Flappy.rotate(-Math.PI / 6);
-                    Flappy.translate(-birdx - birdwidth / 2, -birdy - birdheight / 2);
+                    Flappy.translate(-Birdx - Birdwidth / 2, -Birdy - Birdheight / 2);
                 }
-                if (birdvy > 6&& birdvy <= 10) {
-                    Flappy.translate(birdx + birdwidth / 2, birdy + birdheight / 2);
+                if (Birdvy > 6 && Birdvy <= 10) {
+                    Flappy.translate(Birdx + Birdwidth / 2, Birdy + Birdheight / 2);
                     Flappy.rotate(Math.PI / 6);
-                    Flappy.translate(-birdx - birdwidth / 2, -birdy - birdheight / 2);
+                    Flappy.translate(-Birdx - Birdwidth / 2, -Birdy - Birdheight / 2);
                 }
-                if (birdvy > 10 && birdvy <= 14) {
-                    Flappy.translate(birdx + birdwidth / 2, birdy + birdheight / 2);
+                if (Birdvy > 10 && Birdvy <= 14) {
+                    Flappy.translate(Birdx + Birdwidth / 2, Birdy + Birdheight / 2);
                     Flappy.rotate(Math.PI / 3);
-                    Flappy.translate(-birdx - birdwidth / 2, -birdy - birdheight / 2);
+                    Flappy.translate(-Birdx - Birdwidth / 2, -Birdy - Birdheight / 2);
                 }
-                if (birdvy > 14) {
-                    Flappy.translate(birdx + birdwidth / 2, birdy + birdheight / 2);
+                if (Birdvy > 14) {
+                    Flappy.translate(Birdx + Birdwidth / 2, Birdy + Birdheight / 2);
                     Flappy.rotate(Math.PI / 2);
-                    Flappy.translate(-birdx - birdwidth / 2, -birdy - birdheight / 2);
+                    Flappy.translate(-Birdx - Birdwidth / 2, -Birdy - Birdheight / 2);
                 }
-                Flappy.drawImage(birdimage, 0, 0, 40, 42, birdx, birdy, birdwidth, birdheight);                
+                Flappy.drawImage(Birdimage, 0, 0, 40, 42, Birdx, Birdy, Birdwidth, Birdheight);
                 Flappy.restore();
             }
             else if (gamestate == 2) {
                 Flappy.save();
-                Flappy.translate(birdx + birdwidth / 2, birdy + birdheight / 2);
+                Flappy.translate(Birdx + Birdwidth / 2, Birdy + Birdheight / 2);
                 Flappy.rotate(Math.PI / 2);
-                Flappy.translate(-birdx - birdwidth / 2, -birdy - birdheight / 2);
-                Flappy.drawImage(birdimage, 0, 0, 40, 42, birdx, birdy, birdwidth, birdheight);                
+                Flappy.translate(-Birdx - Birdwidth / 2, -Birdy - Birdheight / 2);
+                Flappy.drawImage(Birdimage, 0, 0, 40, 42, Birdx, Birdy, Birdwidth, Birdheight);
                 Flappy.restore();
             }
         }
@@ -287,9 +289,13 @@
         }
 
         function CheckCollison() {
+            if (Birdx > Pipes[0][0] + pipewidth - movespeed / 2 && Birdx < Pipes[0][0] + pipewidth + movespeed / 2) {
+                playSound(S_score, "sounds/point.mp3");
+                score++;
+            }
             //先判断第一组管道
-            if (birdx + birdwidth > Pipes[0][0] && birdx + birdwidth < Pipes[0][0] + pipewidth + birdwidth) {
-                if (birdy < backgroundheight - Pipes[0][1] - blankwidth || birdy + birdheight > backgroundheight - Pipes[0][1]) {
+            if (Birdx + Birdwidth > Pipes[0][0] && Birdx + Birdwidth < Pipes[0][0] + pipewidth + Birdwidth) {
+                if (Birdy < backgroundheight - Pipes[0][1] - blankwidth || Birdy + Birdheight > backgroundheight - Pipes[0][1]) {
                     playSound(S_hit, "sounds/hit.mp3");
                     playSound(deadsound, "sounds/die.mp3");
                     if (score > highscore)
@@ -298,8 +304,8 @@
                 }
             }
             //判断第二组管道
-            else if (birdx + birdwidth > Pipes[1][0] && birdx + birdwidth < Pipes[1][0] + pipewidth + birdwidth) {
-                if (birdy < backgroundheight - Pipes[1][1] - blankwidth || birdy + birdheight > backgroundheight - Pipes[1][1]) {
+            else if (Birdx + Birdwidth > Pipes[1][0] && Birdx + Birdwidth < Pipes[1][0] + pipewidth + Birdwidth) {
+                if (Birdy < backgroundheight - Pipes[1][1] - blankwidth || Birdy + Birdheight > backgroundheight - Pipes[1][1]) {
                     playSound(S_hit, "sounds/hit.mp3");
                     playSound(deadsound, "sounds/die.mp3");
                     if (score > highscore)
@@ -309,17 +315,14 @@
                 }
             }
             //判断是否碰撞地面
-            else if (birdy + birdheight > backgroundheight) {
+            else if (Birdy + Birdheight > backgroundheight) {
                 playSound(S_hit, "sounds/hit.mp3");
                 playSound(deadsound, "sounds/die.mp3");
                 if (score > highscore)
                     highscore = score;
                 gamestate = 2;
             }
-            if (birdx > Pipes[0][0] + pipewidth - movespeed / 2 && birdx < Pipes[0][0] + pipewidth + movespeed / 2) {
-                playSound(S_score, "sounds/point.mp3");
-                score++;
-            }
+
         }
 
 
@@ -330,7 +333,7 @@
             if (gamestate == 0) {
                 if (key == 83) {
                     playSound(Startsound, "sounds/Start.mp3");
-                    birdvy = -jumpvelocity;
+                    Birdvy = -jumpvelocity;
                     gamestate = 1;
                 }
             }
@@ -338,7 +341,7 @@
 
                 if (key == 32) {
                     playSound(S_fly, "sounds/wing.mp3");
-                    birdvy = -jumpvelocity;
+                    Birdvy = -jumpvelocity;
                 }
             }
             else if (gamestate == 2) {
@@ -362,17 +365,19 @@
             }
             if (gamestate == 0) {
                 playSound(Startsound, "sounds/Start.mp3");
-                birdvy = -jumpvelocity;
+                Birdvy = -jumpvelocity;
                 gamestate = 1;
             }
             else if (gamestate == 1) {
                 playSound(S_fly, "sounds/wing.mp3");
-                birdvy = -jumpvelocity;
+                Birdvy = -jumpvelocity;
             }
-            //游戏结束后判断是否点击了重新开始
+            //如果点击到了猪，游戏重新开始
             else if (gamestate == 2) {
-                playSound(Startsound, "sounds/Start.mp3");
-                restart();
+                if (mx >= Birdx && mx <= Birdx + Birdwidth && my >= Birdy && my <= Birdy + Birdheight) {
+                    playSound(Startsound, "sounds/Start.mp3");
+                    restart();
+                }
             }
         }
 
@@ -381,18 +386,16 @@
             score = 0;
             pipenumber = 0;
             initPipe();
-            birdx = 192 - birdwidth;
-            birdy = 224 - birdheight;
-            birdvy = 0;
+            Birdx = 192 - Birdwidth;
+            Birdy = 224 - Birdheight;
+            Birdvy = 0;
         }
 
     </script>
 </head>
 
 <body onLoad="init();">
-        <audio autoplay="autoplay">
-                <source src="sounds/Truth.mp3" type="audio/mpeg" loop="loop" preload="auto">
-                </audio>
+    <embed src="sounds/China.mp3" autostart="true" loop="true" hidden="true"></embed>
     <audio id="S_fly" playcount="1" autoplay="true" src="">
         Your browser doesn't support the HTML5 element audio.
     </audio>
