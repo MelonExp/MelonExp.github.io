@@ -30,7 +30,7 @@
         var birdy = 224 - birdheight;
         var birdvy = 0;        //鸟初始的y轴速度
         var birdimage;
-        var gravity = 1;		 //重力加速度
+        var gravity = 0.8;		 //重力加速度
         var jumpvelocity = 8;	 //跳跃时获得的向上速度
         var birdstate;
 
@@ -50,10 +50,11 @@
         var score = 0
         var movespeed = groundwidth / 4;    
 
-        var tipimage;
-        var tipwidth = 250;
-        var tipheight = 228;
+        var Infoimage;
+        var Infowidth = 250;
+        var Infoheight = 250;
 
+        var text='Your Score:';
         var boardimage;
         var boardx;
         var boardy = 140;
@@ -72,18 +73,16 @@
         function init() {
             Flappy = document.getElementById('canvas').getContext('2d');
             Flappy.lineWidth = 2;
-            Flappy.font = "bold 40px HarlemNights";
-           // Flappy.fillStyle = "#FFFFFF";
-            upbackground = new Image();
-            upbackground.src = "images/bac.jpg";
+            Flappy.font = "bold 40px KaiTi";
+            Flappy.fillStyle='red';
             bottombackground = new Image();
             bottombackground.src = "images/ground.png";
             bottomstate = 1;
             birdimage = new Image();
             birdimage.src = "images/pig3.png";
             birdstate = 1;
-            tipimage = new Image();
-            tipimage.src = "images/space_tip.png";
+            Infoimage = new Image();
+            Infoimage.src = "images/Info1.png";
             boardimage = new Image();
             boardimage.src = "images/scoreboard.png";
             boardx = (backgroundwidth - boardwidth) / 2;
@@ -122,7 +121,7 @@
             if (gamestate == 1) {
                 birdvy = birdvy + gravity;
                 DrawScene();
-                DrawBird();
+                DrawBird();        
                 DrawScore();
                 CheckCollison();		//检测碰撞
             }
@@ -134,12 +133,11 @@
                 DrawEnd();
                 DrawBird();
                 DrawFinalScore();
-                //Flappy.fillRect(boardx+14,boardy+boardheight-40,75,40); // 测试重新开始按钮的位置
             }
         }
 
         function DrawIns() {
-            Flappy.drawImage(tipimage, birdx - 57, birdy + birdheight + 10, tipwidth, tipheight);
+            Flappy.drawImage(Infoimage, birdx - 90, birdy + birdheight -150, Infowidth, Infoheight+100);
         }
         //绘制分数板
         function DrawFinalScore() {
@@ -154,12 +152,7 @@
         function DrawBegin() {
             //清理画布上上一桢的画面
             Flappy.clearRect(Spacex, Spacey, Spacewidth, Spaceheight);
-            //绘制上方静态背景
-          //  Flappy.drawImage(upbackground, 0, 0, backgroundwidth, backgroundheight);
-            //绘制下方的动态背景
             DrawGround();
-            //绘制边框线
-           // Flappy.strokeRect(Spacex + 1, Spacey + 1, Spacewidth - 2, Spaceheight - 2);
         }
 
         //绘制场景
@@ -226,9 +219,8 @@
         //使用给定的高度和位置绘制上下两根管道
         function DrawSigPipe(location, height) {
             //绘制下面的管道
-            Flappy.drawImage(pipeupimage, 0, 0, pipewidth * 2, height * 2, location, Spaceheight - (height + groundheight), pipewidth, height);
-            Flappy.drawImage(pipedownimage, 0, 793 - (backgroundheight - height - blankwidth) * 2, pipewidth * 2, (backgroundheight - height - blankwidth) * 2, location, 0, pipewidth, backgroundheight - height - blankwidth);
-            //Flappy.drawImage(pipedownimage,0,793-(backgroundheight-height-blankwidth)*2,pipewidth*2,(backgroundheight-height-blankwidth)*2,location,0,pipewidth,222);
+            Flappy.drawImage(pipeupimage, 0, 0, pipewidth * 2, height * 2+25, location, Spaceheight - (height + groundheight)-25, pipewidth, height+25);
+            Flappy.drawImage(pipedownimage, 0, 793 - (backgroundheight - height - blankwidth) * 2, pipewidth * 2, (backgroundheight - height - blankwidth) * 2, location, 0, pipewidth, backgroundheight - height - blankwidth+20);
         }
 
         //绘制需要显示的管道
@@ -252,52 +244,33 @@
 
         function DrawBird() {
             birdy = birdy + birdvy;
-            Flappy.drawImage(birdimage, 0, 0,40, 44, birdx, birdy, birdwidth, birdheight);
-           /* if (birdstate == 1 || birdstate == 2 || birdstate == 3) {
-                Flappy.drawImage(birdimage, 0, 0, 92, 64, birdx, birdy, birdwidth, birdheight);
-                birdstate++;
-            }
-            else if (birdstate == 4 || birdstate == 5 || birdstate == 6) {
-                Flappy.drawImage(birdimage, 92, 0, 92, 64, birdx, birdy, birdwidth, birdheight);
-                birdstate++;
-            }
-            else if (birdstate == 7 || birdstate == 8 || birdstate == 9) {
-                Flappy.drawImage(birdimage, 184, 0, 92, 64, birdx, birdy, birdwidth, birdheight);
-                birdstate++;
-                if (birdstate == 9) birdstate = 1;
-            }*/
-            //context.drawImage(img,0,0,swidth,sheight,x,y,width,height);
+            Flappy.drawImage(birdimage, 0, 0,40, 42, birdx, birdy, birdwidth, birdheight);
         }
 
         function DrawScore() {
+            Flappy.fillText(text,Spacewidth/2-100,60);
             Flappy.fillText(score, Spacewidth / 2 - 2, 120);
         }
 
         function CheckCollison() {
             //先判断第一组管道
-            //如果鸟在x轴上与第一组管道重合
             if (birdx + birdwidth > Pipes[0][0] && birdx + birdwidth < Pipes[0][0] + pipewidth + birdwidth) {
-                //如果鸟在y轴上与第一组管道上部或下部重合
                 if (birdy < backgroundheight - Pipes[0][1] - blankwidth || birdy + birdheight > backgroundheight - Pipes[0][1]) {
                     Flappy.font = "bold 35px HarlemNights";
                     Flappy.fillStyle = "#000000";
                     if (score > highscore)
                         highscore = score;
-                    gamestate = 2;	//游戏结束
+                    gamestate = 2;	
                 }
             }
             //判断第二组管道
-            //如果鸟在x轴上与第二组管道重合
-            //这里我原本使用else if出现了问题，但第一版中却没有问题，对比代码后发现原因是上方第一个if后没有加大括号，
-            //这里的else无法区分对应哪一个if，加上大括号后问题解决，建议将if后的内容都加上大括号，养成良好的变成习惯
             else if (birdx + birdwidth > Pipes[1][0] && birdx + birdwidth < Pipes[1][0] + pipewidth + birdwidth) {
-                //如果鸟在y轴上与第二组管道上部或下部重合
                 if (birdy < backgroundheight - Pipes[1][1] - blankwidth || birdy + birdheight > backgroundheight - Pipes[1][1]) {
                     Flappy.font = "bold 35px HarlemNights";
                     Flappy.fillStyle = "#000000";
                     if (score > highscore)
                         highscore = score;
-                    gamestate = 2;	//游戏结束
+                    gamestate = 2;	
                 }
             }
             //判断是否碰撞地面
@@ -306,7 +279,7 @@
                 Flappy.fillStyle = "#000000";
                 if (score > highscore)
                     highscore = score;
-                gamestate = 2;	//游戏结束
+                gamestate = 2;	
             }
             //通过了一根管道加一分
             if (birdx > Pipes[0][0] + pipewidth - movespeed / 2 && birdx < Pipes[0][0] + pipewidth + movespeed / 2) {
@@ -321,6 +294,7 @@
             var key = evt.keyCode ? evt.keyCode : evt.which;
             if (gamestate == 0) {
                 if (key == 83) {
+                birdvy = -jumpvelocity;
                     gamestate = 1;
                 }
             }
@@ -336,7 +310,7 @@
             }
         }
 
-        //处理鼠标点击事件，相比键盘多了位置判断
+        //处理鼠标点击事件
         function mouseDown(ev) {
             var mx;			//存储鼠标横坐标
             var my;			//存储鼠标纵坐标
