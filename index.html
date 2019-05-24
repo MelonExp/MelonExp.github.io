@@ -6,28 +6,32 @@
         canvas{
             display: block;
             margin: 15 auto;
-            border: 32px solid rebeccapurple;
+            border: 0px solid rebeccapurple;
+        }
+        body {
+            background: url("images/HBac1.jpg");
+            padding-top: 40px;
         }
     </style>
     <script>
         //空间实体
         var Spacex = 0;
         var Spacey = 0;
-        var Spacewidth = 500;
-        var Spaceheight = 600;
-        var backgroundwidth =500;
-        var backgroundheight = 600;
+        var Spacewidth = 384;
+        var Spaceheight = 512;
+        var backgroundwidth = 384;
+        var backgroundheight = 448;
         var groundwidth = 18.5;
         var groundheight = 64;
 
-        var birdwidth = 30;
-        var birdheight = 40;
+        var birdwidth = 50;
+        var birdheight = 60;
         var birdx = 192 - birdwidth;
         var birdy = 224 - birdheight;
         var birdvy = 0;        //鸟初始的y轴速度
         var birdimage;
         var gravity = 1;		 //重力加速度
-        var jumpvelocity = 11;	 //跳跃时获得的向上速度
+        var jumpvelocity = 8;	 //跳跃时获得的向上速度
         var birdstate;
 
         var upbackground;
@@ -36,15 +40,15 @@
         var pipeupimage;
         var pipedownimage;
         var pipewidth = 69;
-        var blankwidth = 156;
-        var pipeinterval = pipewidth + 120;
+        var blankwidth = 150;
+        var pipeinterval = pipewidth + 160;
         var pipenumber = 0;
         var fps = 30;
         var gamestate = 0;
         var times;
         var highscore = 0;
         var score = 0
-        var movespeed = groundwidth / 4;	//场景向左移动的速度
+        var movespeed = groundwidth / 4;    
 
         var tipimage;
         var tipwidth = 250;
@@ -60,7 +64,7 @@
         var Flappy;
         var i;
         var pipeheight = [];
-        var Pipes = [ 	 //要显示在Canvas上的管道的location和height
+        var Pipes = [ 	 
             [0, 0],
             [0, 0],
             [0, 0]];
@@ -68,15 +72,15 @@
         function init() {
             Flappy = document.getElementById('canvas').getContext('2d');
             Flappy.lineWidth = 2;
-            Flappy.font = "bold 40px HarlemNights";			
-            Flappy.fillStyle = "#FFFFFF";
+            Flappy.font = "bold 40px HarlemNights";
+           // Flappy.fillStyle = "#FFFFFF";
             upbackground = new Image();
-            upbackground.src = "images/background.png";
+            upbackground.src = "images/bac.jpg";
             bottombackground = new Image();
             bottombackground.src = "images/ground.png";
             bottomstate = 1;
             birdimage = new Image();
-            birdimage.src = "images/bird.png";
+            birdimage.src = "images/pig3.png";
             birdstate = 1;
             tipimage = new Image();
             tipimage.src = "images/space_tip.png";
@@ -98,7 +102,7 @@
 
         function initPipe() {
             for (i = 0; i < 200; i++)
-                pipeheight[i] = Math.ceil(Math.random() * 216) + 77 ;
+                pipeheight[i] = Math.ceil(Math.random() * 216) + 56;
             for (i = 0; i < 3; i++) {
                 Pipes[i][0] = Spacewidth + i * pipeinterval;
                 Pipes[i][1] = pipeheight[pipenumber];
@@ -110,16 +114,16 @@
         function work() {
             //游戏未开始
             if (gamestate == 0) {
-                DrawBegin();	
-                DrawBird();			
-                DrawIns(); 			
+                DrawBegin();
+                DrawBird();
+                DrawIns();
             }
             //游戏进行中
             if (gamestate == 1) {
                 birdvy = birdvy + gravity;
-                DrawScene(); 		
-                DrawBird();			
-                DrawScore();		
+                DrawScene();
+                DrawBird();
+                DrawScore();
                 CheckCollison();		//检测碰撞
             }
             //游戏结束
@@ -127,9 +131,9 @@
                 if (birdy + birdheight < backgroundheight)	//如果鸟没有落地
                     birdvy = birdvy + gravity;
                 else birdvy = 0;
-                DrawEnd();		
-                DrawBird();		    
-                DrawFinalScore();   
+                DrawEnd();
+                DrawBird();
+                DrawFinalScore();
                 //Flappy.fillRect(boardx+14,boardy+boardheight-40,75,40); // 测试重新开始按钮的位置
             }
         }
@@ -137,51 +141,40 @@
         function DrawIns() {
             Flappy.drawImage(tipimage, birdx - 57, birdy + birdheight + 10, tipwidth, tipheight);
         }
-
         //绘制分数板
         function DrawFinalScore() {
             //绘制分数板
             Flappy.drawImage(boardimage, boardx, boardy, boardwidth, boardheight);
             //绘制当前的得分
-            Flappy.fillText(score, boardx + 140, boardheight / 2 + boardy - 8);//132
+            Flappy.fillText(score, boardx + 140, boardheight / 2 + boardy - 8);
             //绘制最高分
-            Flappy.fillText(highscore, boardx + 140, boardheight / 2 + boardy + 44);//184
+            Flappy.fillText(highscore, boardx + 140, boardheight / 2 + boardy + 44);
         }
         //绘制开始场景(不包括管道)
         function DrawBegin() {
             //清理画布上上一桢的画面
             Flappy.clearRect(Spacex, Spacey, Spacewidth, Spaceheight);
             //绘制上方静态背景
-            Flappy.drawImage(upbackground, 0, 0, backgroundwidth, backgroundheight);
+          //  Flappy.drawImage(upbackground, 0, 0, backgroundwidth, backgroundheight);
             //绘制下方的动态背景
             DrawGround();
             //绘制边框线
-            Flappy.strokeRect(Spacex + 1, Spacey + 1, Spacewidth - 2, Spaceheight - 2);
+           // Flappy.strokeRect(Spacex + 1, Spacey + 1, Spacewidth - 2, Spaceheight - 2);
         }
 
         //绘制场景
         function DrawScene() {
             //清理画布上上一桢的画面
             Flappy.clearRect(Spacex, Spacey, Spacewidth, Spaceheight);
-            //绘制上方静态背景
-            Flappy.drawImage(upbackground, 0, 0, backgroundwidth, backgroundheight);
-            //绘制下方的动态背景
             DrawGround();
             //绘制管道
-            //DrawSigPipe(80,56);
-            //DrawSigPipe(200,272);
             drawAllPipe();
-            //绘制边框线
-            Flappy.strokeRect(Spacex + 1, Spacey + 1, Spacewidth - 2, Spaceheight - 2);
+            //Flappy.strokeRect(Spacex + 1, Spacey + 1, Spacewidth - 2, Spaceheight - 2);
         }
 
         //绘制结束场景(不包括管道)
         function DrawEnd() {
-            //清理画布上上一桢的画面
             Flappy.clearRect(Spacex, Spacey, Spacewidth, Spaceheight);
-            //绘制上方静态背景
-            Flappy.drawImage(upbackground, 0, 0, backgroundwidth, backgroundheight);
-            //绘制下方的静态背景，根据bottomstate来判断如何绘制静态地面
             switch (bottomstate) {
                 case 1:
                     for (i = 0; i < times; i++)
@@ -203,7 +196,7 @@
             for (i = 0; i < 3; i++)
                 DrawSigPipe(Pipes[i][0], Pipes[i][1]);
             //绘制边框线
-            Flappy.strokeRect(Spacex + 1, Spacey + 1, Spacewidth - 2, Spaceheight - 2);
+            //Flappy.strokeRect(Spacex + 1, Spacey + 1, Spacewidth - 2, Spaceheight - 2);
         }
 
         //绘制下方的动态背景
@@ -215,7 +208,7 @@
             }
             else if (bottomstate == 2) {
                 for (i = 0; i < times; i++)
-                    Flappy.drawImage(bottombackground, groundwidth * (i - 0.25), backgroundheight, groundwidth, groundheight);
+                    Flappy.drawImage(bottombackground, groundwidth * (i -0.25), backgroundheight, groundwidth, groundheight);
                 bottomstate = 3;
             }
             else if (bottomstate == 3) {
@@ -259,7 +252,8 @@
 
         function DrawBird() {
             birdy = birdy + birdvy;
-            if (birdstate == 1 || birdstate == 2 || birdstate == 3) {
+            Flappy.drawImage(birdimage, 0, 0,40, 44, birdx, birdy, birdwidth, birdheight);
+           /* if (birdstate == 1 || birdstate == 2 || birdstate == 3) {
                 Flappy.drawImage(birdimage, 0, 0, 92, 64, birdx, birdy, birdwidth, birdheight);
                 birdstate++;
             }
@@ -271,7 +265,7 @@
                 Flappy.drawImage(birdimage, 184, 0, 92, 64, birdx, birdy, birdwidth, birdheight);
                 birdstate++;
                 if (birdstate == 9) birdstate = 1;
-            }
+            }*/
             //context.drawImage(img,0,0,swidth,sheight,x,y,width,height);
         }
 
@@ -322,17 +316,23 @@
 
 
         //处理键盘事件
-        function keyDown() {
+        function keyDown(evt) {
+            evt = (evt) ? evt : ((window.event) ? window.event : "");
+            var key = evt.keyCode ? evt.keyCode : evt.which;
             if (gamestate == 0) {
-                birdvy = -jumpvelocity;
-                gamestate = 1;
+                if (key == 83) {
+                    gamestate = 1;
+                }
             }
             else if (gamestate == 1) {
+                if(key==32)
                 birdvy = -jumpvelocity;
             }
-            else if(gamestate==2)
-            {
-                restart();
+            else if (gamestate == 2) {
+                if(key==82)
+                {
+                    restart();
+                }
             }
         }
 
@@ -343,7 +343,7 @@
             if (ev.layerX || ev.layerX == 0) { // Firefox
                 mx = ev.layerX;
                 my = ev.layerY;
-            } else if (ev.offsetX || ev.offsetX == 0) { // Opera
+            } else if (ev.offsetX || ev.offsetX == 0) { //IE
                 mx = ev.offsetX;
                 my = ev.offsetY;
             }
@@ -357,7 +357,7 @@
             //游戏结束后判断是否点击了重新开始
             else if (gamestate == 2) {
                 //Flappy.fillRect(boardx+14,boardy+boardheight-40,75,40); 
-                    restart();
+                restart();
             }
         }
 
@@ -377,7 +377,7 @@
 </head>
 
 <body onLoad="init();">
-    <canvas id="canvas" width="500" height="600" style="margin-top: 8px;">
+    <canvas id="canvas" width="384" height="512" style="margin-top: 0px;">
     </canvas>
 </body>
 
