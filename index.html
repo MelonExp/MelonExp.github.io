@@ -82,7 +82,7 @@
             S_score = document.getElementById('S_score');
             S_hit = document.getElementById('S_hit');
             deadsound = document.getElementById('deadsound');
-            swooshingsound = document.getElementById('swooshingsound');
+            Startsound = document.getElementById('Startsound');
             Flappy.lineWidth = 2;
             Flappy.font = "bold 40px KaiTi";
             Flappy.fillStyle = 'red';
@@ -329,7 +329,7 @@
             var key = evt.keyCode ? evt.keyCode : evt.which;
             if (gamestate == 0) {
                 if (key == 83) {
-                    playSound(swooshingsound, "sounds/swooshing.mp3");
+                    playSound(Startsound, "sounds/Start.mp3");
                     birdvy = -jumpvelocity;
                     gamestate = 1;
                 }
@@ -343,7 +343,7 @@
             }
             else if (gamestate == 2) {
                 if (key == 82) {
-                    playSound(swooshingsound, "sounds/swooshing.mp3");
+                    playSound(Startsound, "sounds/Start.mp3");
                     restart();
                 }
             }
@@ -361,7 +361,7 @@
                 my = ev.offsetY;
             }
             if (gamestate == 0) {
-                playSound(swooshingsound, "sounds/swooshing.mp3");
+                playSound(Startsound, "sounds/Start.mp3");
                 birdvy = -jumpvelocity;
                 gamestate = 1;
             }
@@ -371,7 +371,7 @@
             }
             //游戏结束后判断是否点击了重新开始
             else if (gamestate == 2) {
-                playSound(swooshingsound, "sounds/swooshing.mp3");
+                playSound(Startsound, "sounds/Start.mp3");
                 restart();
             }
         }
@@ -390,9 +390,9 @@
 </head>
 
 <body onLoad="init();">
-    <audio autoplay="autoplay" loop="loop" preload="auto" src="sounds/Truth.mp3">
-              你的浏览器不支持audio标签
-    </audio>
+        <audio autoplay="autoplay">
+                <source src="sounds/Truth.mp3" type="audio/mpeg" loop="loop" preload="auto">
+                </audio>
     <audio id="S_fly" playcount="1" autoplay="true" src="">
         Your browser doesn't support the HTML5 element audio.
     </audio>
@@ -405,7 +405,7 @@
     <audio id="deadsound" playcount="1" autoplay="true" src="">
         Your browser doesn't support the HTML5 element audio.
     </audio>
-    <audio id="swooshingsound" playcount="1" autoplay="true" src="">
+    <audio id="Startsound" playcount="1" autoplay="true" src="">
         Your browser doesn't support the HTML5 element audio.
     </audio>
     <canvas id="canvas" width="384" height="512" style="margin-top: 0px;">
