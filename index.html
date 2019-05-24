@@ -25,10 +25,10 @@
         var groundwidth = 18.5;
         var groundheight = 64;
 
-        var flysound;
-        var hitsound;
-        var deathsound;
-        var scoresound;
+        var S_fly;
+        var S_hit;
+        var S_death;
+        var S_score;
 
         var birdwidth = 50;
         var birdheight = 60;
@@ -51,7 +51,7 @@
         var pipenumber = 0;
         var fps = 30;
         var gamestate = 0;
-        var times;
+        var Num;
         var highscore = 0;
         var score = 0
         var movespeed = groundwidth / 4;
@@ -60,7 +60,7 @@
         var Infowidth = 250;
         var Infoheight = 250;
 
-        var text = 'Your Score:';
+        var text = 'Your Score';
         var boardimage;
         var boardx;
         var boardy = 140;
@@ -78,9 +78,9 @@
 
         function init() {
             Flappy = document.getElementById('canvas').getContext('2d');
-            flysound = document.getElementById('flysound');
-            scoresound = document.getElementById('scoresound');
-            hitsound = document.getElementById('hitsound');
+            S_fly = document.getElementById('S_fly');
+            S_score = document.getElementById('S_score');
+            S_hit = document.getElementById('S_hit');
             deadsound = document.getElementById('deadsound');
             swooshingsound = document.getElementById('swooshingsound');
             Flappy.lineWidth = 2;
@@ -101,7 +101,7 @@
             pipeupimage.src = "images/pipeup.png";
             pipedownimage = new Image();
             pipedownimage.src = "images/pipedown.png";
-            times = Math.ceil(Spacewidth / groundwidth) + 1;
+            Num = Math.ceil(Spacewidth / groundwidth) + 1;
 
             initPipe();
             DrawBegin();
@@ -155,91 +155,74 @@
         function DrawIns() {
             Flappy.drawImage(Infoimage, birdx - 90, birdy + birdheight - 150, Infowidth, Infoheight + 100);
         }
-        //绘制分数板
         function DrawFinalScore() {
-            //绘制分数板
             Flappy.drawImage(boardimage, boardx, boardy, boardwidth, boardheight);
-            //绘制当前的得分
             Flappy.fillText(score, boardx + 140, boardheight / 2 + boardy - 8);
-            //绘制最高分
             Flappy.fillText(highscore, boardx + 140, boardheight / 2 + boardy + 44);
         }
-        //绘制开始场景(不包括管道)
         function DrawBegin() {
-            //清理画布上上一桢的画面
             Flappy.clearRect(Spacex, Spacey, Spacewidth, Spaceheight);
             DrawGround();
         }
 
-        //绘制场景
         function DrawScene() {
-            //清理画布上上一桢的画面
             Flappy.clearRect(Spacex, Spacey, Spacewidth, Spaceheight);
             DrawGround();
-            //绘制管道
             drawAllPipe();
-            //Flappy.strokeRect(Spacex + 1, Spacey + 1, Spacewidth - 2, Spaceheight - 2);
         }
 
-        //绘制结束场景(不包括管道)
         function DrawEnd() {
             Flappy.clearRect(Spacex, Spacey, Spacewidth, Spaceheight);
             switch (bottomstate) {
                 case 1:
-                    for (i = 0; i < times; i++)
+                    for (i = 0; i < Num; i++)
                         Flappy.drawImage(bottombackground, groundwidth * (i - 0.75), backgroundheight, groundwidth, groundheight);
                     break;
                 case 2:
-                    for (i = 0; i < times; i++)
+                    for (i = 0; i < Num; i++)
                         Flappy.drawImage(bottombackground, groundwidth * i, backgroundheight, groundwidth, groundheight);
                     break;
                 case 3:
-                    for (i = 0; i < times; i++)
+                    for (i = 0; i < Num; i++)
                         Flappy.drawImage(bottombackground, groundwidth * (i - 0.25), backgroundheight, groundwidth, groundheight);
                     break;
                 case 4:
-                    for (i = 0; i < times; i++)
+                    for (i = 0; i < Num; i++)
                         Flappy.drawImage(bottombackground, groundwidth * (i - 0.5), backgroundheight, groundwidth, groundheight);
             }
             //绘制当前的柱子
             for (i = 0; i < 3; i++)
                 DrawSigPipe(Pipes[i][0], Pipes[i][1]);
-            //绘制边框线
-            //Flappy.strokeRect(Spacex + 1, Spacey + 1, Spacewidth - 2, Spaceheight - 2);
         }
 
-        //绘制下方的动态背景
         function DrawGround() {
             if (bottomstate == 1) {
-                for (i = 0; i < times; i++)
+                for (i = 0; i < Num; i++)
                     Flappy.drawImage(bottombackground, groundwidth * i, backgroundheight, groundwidth, groundheight);
                 bottomstate = 2;
             }
             else if (bottomstate == 2) {
-                for (i = 0; i < times; i++)
+                for (i = 0; i < Num; i++)
                     Flappy.drawImage(bottombackground, groundwidth * (i - 0.25), backgroundheight, groundwidth, groundheight);
                 bottomstate = 3;
             }
             else if (bottomstate == 3) {
-                for (i = 0; i < times; i++)
+                for (i = 0; i < Num; i++)
                     Flappy.drawImage(bottombackground, groundwidth * (i - 0.5), backgroundheight, groundwidth, groundheight);
                 bottomstate = 4;
             }
             else if (bottomstate == 4) {
-                for (i = 0; i < times; i++)
+                for (i = 0; i < Num; i++)
                     Flappy.drawImage(bottombackground, groundwidth * (i - 0.75), backgroundheight, groundwidth, groundheight);
                 bottomstate = 1;
             }
         }
 
-        //使用给定的高度和位置绘制上下两根管道
         function DrawSigPipe(location, height) {
-            //绘制下面的管道
             Flappy.drawImage(pipeupimage, 0, 0, pipewidth * 2, height * 2 + 25, location, Spaceheight - (height + groundheight) - 25, pipewidth, height + 25);
             Flappy.drawImage(pipedownimage, 0, 793 - (backgroundheight - height - blankwidth) * 2, pipewidth * 2, (backgroundheight - height - blankwidth) * 2, location, 0, pipewidth, backgroundheight - height - blankwidth + 20);
         }
 
-        //绘制需要显示的管道
         function drawAllPipe() {
             for (i = 0; i < 3; i++) {
                 Pipes[i][0] = Pipes[i][0] - movespeed;
@@ -260,7 +243,42 @@
 
         function DrawBird() {
             birdy = birdy + birdvy;
-            Flappy.drawImage(birdimage, 0, 0, 40, 42, birdx, birdy, birdwidth, birdheight);
+            if (gamestate == 0) {
+                Flappy.drawImage(birdimage, 0, 0, 40, 42, birdx, birdy, birdwidth, birdheight);
+            }
+            else if (gamestate == 1) {
+                Flappy.save();
+                if (birdvy <= 6) {
+                    Flappy.translate(birdx + birdwidth / 2, birdy + birdheight / 2);
+                    Flappy.rotate(-Math.PI / 6);
+                    Flappy.translate(-birdx - birdwidth / 2, -birdy - birdheight / 2);
+                }
+                if (birdvy > 6&& birdvy <= 10) {
+                    Flappy.translate(birdx + birdwidth / 2, birdy + birdheight / 2);
+                    Flappy.rotate(Math.PI / 6);
+                    Flappy.translate(-birdx - birdwidth / 2, -birdy - birdheight / 2);
+                }
+                if (birdvy > 10 && birdvy <= 14) {
+                    Flappy.translate(birdx + birdwidth / 2, birdy + birdheight / 2);
+                    Flappy.rotate(Math.PI / 3);
+                    Flappy.translate(-birdx - birdwidth / 2, -birdy - birdheight / 2);
+                }
+                if (birdvy > 14) {
+                    Flappy.translate(birdx + birdwidth / 2, birdy + birdheight / 2);
+                    Flappy.rotate(Math.PI / 2);
+                    Flappy.translate(-birdx - birdwidth / 2, -birdy - birdheight / 2);
+                }
+                Flappy.drawImage(birdimage, 0, 0, 40, 42, birdx, birdy, birdwidth, birdheight);                
+                Flappy.restore();
+            }
+            else if (gamestate == 2) {
+                Flappy.save();
+                Flappy.translate(birdx + birdwidth / 2, birdy + birdheight / 2);
+                Flappy.rotate(Math.PI / 2);
+                Flappy.translate(-birdx - birdwidth / 2, -birdy - birdheight / 2);
+                Flappy.drawImage(birdimage, 0, 0, 40, 42, birdx, birdy, birdwidth, birdheight);                
+                Flappy.restore();
+            }
         }
 
         function DrawScore() {
@@ -272,7 +290,7 @@
             //先判断第一组管道
             if (birdx + birdwidth > Pipes[0][0] && birdx + birdwidth < Pipes[0][0] + pipewidth + birdwidth) {
                 if (birdy < backgroundheight - Pipes[0][1] - blankwidth || birdy + birdheight > backgroundheight - Pipes[0][1]) {
-                    playSound(hitsound, "sounds/hit.mp3");
+                    playSound(S_hit, "sounds/hit.mp3");
                     playSound(deadsound, "sounds/die.mp3");
                     if (score > highscore)
                         highscore = score;
@@ -282,7 +300,7 @@
             //判断第二组管道
             else if (birdx + birdwidth > Pipes[1][0] && birdx + birdwidth < Pipes[1][0] + pipewidth + birdwidth) {
                 if (birdy < backgroundheight - Pipes[1][1] - blankwidth || birdy + birdheight > backgroundheight - Pipes[1][1]) {
-                    playSound(hitsound, "sounds/hit.mp3");
+                    playSound(S_hit, "sounds/hit.mp3");
                     playSound(deadsound, "sounds/die.mp3");
                     if (score > highscore)
                         highscore = score;
@@ -292,14 +310,14 @@
             }
             //判断是否碰撞地面
             else if (birdy + birdheight > backgroundheight) {
-                playSound(hitsound, "sounds/hit.mp3");
+                playSound(S_hit, "sounds/hit.mp3");
                 playSound(deadsound, "sounds/die.mp3");
                 if (score > highscore)
                     highscore = score;
                 gamestate = 2;
             }
             if (birdx > Pipes[0][0] + pipewidth - movespeed / 2 && birdx < Pipes[0][0] + pipewidth + movespeed / 2) {
-                playSound(scoresound, "sounds/point.mp3");
+                playSound(S_score, "sounds/point.mp3");
                 score++;
             }
         }
@@ -319,7 +337,7 @@
             else if (gamestate == 1) {
 
                 if (key == 32) {
-                    playSound(flysound, "sounds/wing.mp3");
+                    playSound(S_fly, "sounds/wing.mp3");
                     birdvy = -jumpvelocity;
                 }
             }
@@ -333,8 +351,8 @@
 
         //处理鼠标点击事件
         function mouseDown(ev) {
-            var mx;			//存储鼠标横坐标
-            var my;			//存储鼠标纵坐标
+            var mx;
+            var my;
             if (ev.layerX || ev.layerX == 0) { // Firefox
                 mx = ev.layerX;
                 my = ev.layerY;
@@ -348,12 +366,11 @@
                 gamestate = 1;
             }
             else if (gamestate == 1) {
-                playSound(flysound, "sounds/wing.mp3");
+                playSound(S_fly, "sounds/wing.mp3");
                 birdvy = -jumpvelocity;
             }
             //游戏结束后判断是否点击了重新开始
             else if (gamestate == 2) {
-                //Flappy.fillRect(boardx+14,boardy+boardheight-40,75,40); 
                 playSound(swooshingsound, "sounds/swooshing.mp3");
                 restart();
             }
@@ -373,16 +390,16 @@
 </head>
 
 <body onLoad="init();">
-    <audio autoplay="autoplay"  loop="loop" preload="auto" src="sounds/Truth.mp3">
+    <audio autoplay="autoplay" loop="loop" preload="auto" src="sounds/Truth.mp3">
               你的浏览器不支持audio标签
     </audio>
-    <audio id="flysound" playcount="1" autoplay="true" src="">
+    <audio id="S_fly" playcount="1" autoplay="true" src="">
         Your browser doesn't support the HTML5 element audio.
     </audio>
-    <audio id="scoresound" playcount="1" autoplay="true" src="">
+    <audio id="S_score" playcount="1" autoplay="true" src="">
         Your browser doesn't support the HTML5 element audio.
     </audio>
-    <audio id="hitsound" playcount="1" autoplay="true" src="">
+    <audio id="S_hit" playcount="1" autoplay="true" src="">
         Your browser doesn't support the HTML5 element audio.
     </audio>
     <audio id="deadsound" playcount="1" autoplay="true" src="">
