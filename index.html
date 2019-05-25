@@ -85,7 +85,7 @@
             deadsound = document.getElementById('deadsound');
             Startsound = document.getElementById('Startsound');
             Flappy.lineWidth = 2;
-            Flappy.font = "bold 40px KaiTi";
+            Flappy.font = "bold 55px KaiTi";
             Flappy.fillStyle = '#EC7063';
             bottombackground = new Image();
             bottombackground.src = "images/ground.png";
@@ -159,8 +159,8 @@
         }
         function DrawFinalScore() {
             Flappy.drawImage(boardimage, boardx - 50, boardy - 100, boardwidth + 100, boardheight + 50);
-            Flappy.fillText(score, boardx + 160, boardheight / 2 + boardy - 60);
-            Flappy.fillText(highscore, boardx + 160, boardheight / 2 + boardy + 30);
+            Flappy.fillText(score, boardx + 180, boardheight / 2 + boardy -58);
+            Flappy.fillText(highscore, boardx + 180, boardheight / 2 + boardy + 30);
         }
         function DrawBegin() {
             Flappy.clearRect(Spacex, Spacey, Spacewidth, Spaceheight);
@@ -284,7 +284,7 @@
         }
 
         function DrawScore() {
-            Flappy.fillText(text, Spacewidth / 2 - 100, 60);
+            Flappy.fillText(text, Spacewidth / 2 - 140, 60);
             Flappy.fillText(score, Spacewidth / 2 - 2, 120);
         }
 
