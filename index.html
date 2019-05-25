@@ -129,40 +129,10 @@
                 sound.src = src;
             }
         }
-        //游戏的主要逻辑及绘制
-        function work() {
-            //游戏未开始
-            if (gamestate == 0) {
-                DrawBegin();
-                DrawBird();
-                DrawIns();
-            }
-            //游戏进行中
-            if (gamestate == 1) {
-                Birdvy = Birdvy + gravity;
-                DrawScene();
-                DrawBird();
-                DrawScore();
-                CheckCollison();		//检测碰撞
-            }
-            //游戏结束
-            if (gamestate == 2) {
-                if (Birdy + Birdheight < backgroundheight)	//如果鸟没有落地
-                    Birdvy = Birdvy + gravity;
-                else Birdvy = 0;
-                DrawEnd();
-                DrawBird();
-                DrawFinalScore();
-            }
-        }
 
-        function DrawIns() {
+
+        function DrawInfo() {
             Flappy.drawImage(Infoimage, Birdx - 90, Birdy + Birdheight - 150, Infowidth, Infoheight + 100);
-        }
-        function DrawFinalScore() {
-            Flappy.drawImage(boardimage, boardx - 50, boardy - 100, boardwidth + 100, boardheight + 50);
-            Flappy.fillText(score, boardx + 180, boardheight / 2 + boardy -58);
-            Flappy.fillText(highscore, boardx + 180, boardheight / 2 + boardy + 30);
         }
         function DrawBegin() {
             Flappy.clearRect(Spacex, Spacey, Spacewidth, Spaceheight);
@@ -326,7 +296,11 @@
             }
 
         }
-
+        function DrawFinalScore() {
+            Flappy.drawImage(boardimage, boardx - 50, boardy - 100, boardwidth + 100, boardheight + 50);
+            Flappy.fillText(score, boardx + 180, boardheight / 2 + boardy - 58);
+            Flappy.fillText(highscore, boardx + 180, boardheight / 2 + boardy + 30);
+        }
 
         //处理键盘事件
         function keyDown(evt) {
@@ -391,6 +365,33 @@
             Birdx = 192 - Birdwidth;
             Birdy = 224 - Birdheight;
             Birdvy = 0;
+        }
+
+        //游戏的主要逻辑
+        function work() {
+            //游戏未开始
+            if (gamestate == 0) {
+                DrawBegin();
+                DrawBird();
+                DrawInfo();
+            }
+            //游戏进行中
+            if (gamestate == 1) {
+                Birdvy = Birdvy + gravity;
+                DrawScene();
+                DrawBird();
+                DrawScore();
+                CheckCollison();		//检测碰撞
+            }
+            //游戏结束
+            if (gamestate == 2) {
+                if (Birdy + Birdheight < backgroundheight)	//如果鸟没有落地
+                    Birdvy = Birdvy + gravity;
+                else Birdvy = 0;
+                DrawEnd();
+                DrawBird();
+                DrawFinalScore();
+            }
         }
 
     </script>
